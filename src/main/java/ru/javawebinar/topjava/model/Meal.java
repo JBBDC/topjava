@@ -3,10 +3,11 @@ package ru.javawebinar.topjava.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Meal {
+public class Meal implements Comparable{
 
     private Long id;
 
@@ -55,5 +56,11 @@ public class Meal {
 
     public LocalTime getTime() {
         return dateTime.toLocalTime();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Meal obj = (Meal) o;
+        return getDateTime().compareTo(obj.getDateTime());
     }
 }

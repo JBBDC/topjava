@@ -23,11 +23,8 @@ public class MealTo {
     }
 
     public MealTo(Long id, LocalDateTime dateTime, String description, int calories, boolean exceed) {
+        this(dateTime,description,calories,exceed);
         this.id = id;
-        this.dateTime = dateTime;
-        this.description = description;
-        this.calories = calories;
-        this.exceed=exceed;
     }
 
     public Long getId() {
