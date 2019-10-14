@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -10,7 +11,6 @@
         .normal {
             color: green;
         }
-
         .excess {
             color: red;
         }
@@ -32,14 +32,15 @@
         </tr>
         <form method="get" action="meals">
             <tr>
-                <td><input type="date" name="startDate"></td>
-                <td><input type="date" name="endDate"></td>
-                <td><input type="time" name="startTime"></td>
-                <td><input type="time" name="endTime"></td>
+                <td><input type="date" name="startDate" value="${filter[0]}"></td>
+                <td><input type="date" name="endDate" value="${filter[1]}"></td>
+                <td><input type="time" name="startTime" value="${filter[2]}"></td>
+                <td><input type="time" name="endTime" value="${filter[3]}"></td>
             </tr>
             <tr>
                 <td>
                     <button type="submit">Filter</button>
+                    <button type="button" onclick="window.location = window.location.pathname">Reset</button>
                 </td>
             </tr>
         </form>

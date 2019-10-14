@@ -13,9 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -28,12 +26,10 @@ public class MealServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        try {
-            appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
-            controller = appCtx.getBean(MealRestController.class);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
+        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        controller = appCtx.getBean(MealRestController.class);
+
+
     }
 
     @Override
@@ -47,14 +43,17 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
 
-        Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id)
-                ,LocalDateTime.parse(request.getParameter("dateTime"))
-                ,request.getParameter("description")
-                ,Integer.parseInt(request.getParameter("calories")));
+        Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
+                LocalDateTime.parse(request.getParameter("dateTime")),
+                request.getParameter("description"),
+                Integer.parseInt(request.getParameter("calories")));
 
-        log.info(id.isEmpty() ? "Create {}" : "Update {}", id);
-        if (id.isEmpty()) controller.create(meal);
-        else controller.update(meal, Integer.parseInt(id));
+        log.info(meal.isNew() ? "Create {}" : "Update {}", id);
+        if (meal.isNew()) {
+            controller.create(meal);
+        } else {
+            controller.update(meal, meal.getId());
+        }
         response.sendRedirect("meals");
     }
 
@@ -80,20 +79,15 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
+                String[] filter = {request.getParameter("startDate"), request.getParameter("endDate"),
+                        request.getParameter("startTime"), request.getParameter("endTime")};
+
                 if (request.getParameter("startDate") == null || request.getParameter("endDate") == null
                         || request.getParameter("startTime") == null || request.getParameter("endTime") == null) {
-                    request.setAttribute("meals", controller.getAll());
+                    request.setAttribute("meals", controller.getAllFiltered("", "", "", ""));
                 } else {
-                    request.setAttribute("meals", controller.getAllFiltered(
-                            request.getParameter("startDate").isEmpty() ? LocalDate.MIN
-                                    : LocalDate.parse(request.getParameter("startDate")),
-                            request.getParameter("endDate").isEmpty() ? LocalDate.MAX
-                                    : LocalDate.parse(request.getParameter("endDate")),
-                            request.getParameter("startTime").isEmpty() ? LocalTime.MIN
-                                    : LocalTime.parse(request.getParameter("startTime")),
-                            request.getParameter("endTime").isEmpty() ? LocalTime.MAX
-                                    : LocalTime.parse(request.getParameter("endTime"))
-                    ));
+                    request.setAttribute("filter", filter);
+                    request.setAttribute("meals", controller.getAllFiltered(filter[0],filter[1],filter[2],filter[3]));
                 }
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;

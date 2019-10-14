@@ -7,15 +7,15 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
 
@@ -28,16 +28,19 @@ public class MealRestController {
 
     public List<MealTo> getAll() {
         log.info("getAll");
-        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId(), LocalDate.MIN
-                , LocalDate.MAX), DEFAULT_CALORIES_PER_DAY);
+        return MealsUtil.getTos(service.getAll(), DEFAULT_CALORIES_PER_DAY);
     }
 
-    public List<MealTo> getAllFiltered(LocalDate startDate, LocalDate endDate, LocalTime starTime, LocalTime endTime) {
+    public List<MealTo> getAllFiltered(String startDate, String endDate, String startTime, String endTime) {
         log.info("getAllFiltered");
-        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId(), startDate, endDate), DEFAULT_CALORIES_PER_DAY)
-                .stream()
-                .filter(mealTo -> DateTimeUtil.isBetween(mealTo.getDateTime().toLocalTime(), starTime, endTime))
-                .collect(Collectors.toList());
+        return new ArrayList<>(MealsUtil.getFilteredTos(
+                service.getAll(startDate.isEmpty() ? LocalDate.MIN : LocalDate.parse(startDate),
+                        endDate.isEmpty() ? LocalDate.MAX : LocalDate.parse(endDate),
+                        SecurityUtil.authUserId()),
+                DEFAULT_CALORIES_PER_DAY,
+                startTime.isEmpty() ? LocalTime.MIN : LocalTime.parse(startTime),
+                endTime.isEmpty() ? LocalTime.MAX : LocalTime.parse(endTime)
+        ));
     }
 
     public Meal create(Meal meal) {
@@ -53,6 +56,7 @@ public class MealRestController {
 
     public void update(Meal meal, int id) {
         log.info("update {}", meal);
+        assureIdConsistent(meal, id);
         service.update(meal, SecurityUtil.authUserId());
     }
 
