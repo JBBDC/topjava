@@ -25,13 +25,11 @@ public class InMemoryMealRepository implements MealRepository {
     public Meal save(Meal meal, Integer userId) {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            repository.computeIfAbsent(userId, v -> new HashMap<>());
-            repository.get(userId).put(meal.getId(), meal);
-            return meal;
+            return getUserMeals(userId).put(meal.getId(), meal);
         }
         // treat case: update, but not present in storage
         HashMap<Integer, Meal> map = repository.get(userId);
-        if (map != null) {
+        if (map != null && map.get(meal.getId()) != null) {
             return map.put(meal.getId(), meal);
         }
         return null;
@@ -39,39 +37,29 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, Integer userId) {
-        HashMap<Integer, Meal> map = repository.get(userId);
-        if (map != null) {
-            return map.remove(id) != null;
-        }
-        return false;
+            return getUserMeals(userId).remove(id) != null;
     }
 
     @Override
     public Meal get(int id, Integer userId) {
-        HashMap<Integer, Meal> map = repository.get(userId);
-        if (map != null) {
-            return map.get(id);
-        }
-        return null;
+            return getUserMeals(userId).get(id);
     }
 
     @Override
-    public List<Meal> getAll(LocalDate startDate, LocalDate endDate, Integer userId) {
-        HashMap<Integer, Meal> map = repository.get(userId);
-        if (map != null) {
-            return map.values().stream()
+    public List<Meal> getAllFiltered(LocalDate startDate, LocalDate endDate, Integer userId) {
+                    return getUserMeals(userId).values().stream()
                     .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate))
                     .sorted(Comparator.comparing(Meal::getDate).reversed())
                     .collect(Collectors.toList());
-        }
-        return new ArrayList<>();
-    }
+            }
 
     @Override
-    public List<Meal> getAll() {
-        return repository.values().stream()
-                .flatMap(x -> x.values().stream())
-                .collect(Collectors.toList());
+    public List<Meal> getAll(Integer userId) {
+        return new ArrayList<>(repository.computeIfAbsent(userId, map -> new HashMap<>()).values());
+    }
+
+    private HashMap<Integer, Meal> getUserMeals(int userId) {
+        return repository.computeIfAbsent(userId, map -> new HashMap<>());
     }
 
 }

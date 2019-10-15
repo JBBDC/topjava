@@ -33,12 +33,12 @@ public class MealService {
         return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
-    public List<Meal> getAll(LocalDate startDate, LocalDate endDate, Integer userId) {
-        return repository.getAll(startDate, endDate, userId);
+    public List<Meal> getAllFiltered(LocalDate startDate, LocalDate endDate, Integer userId) {
+        return repository.getAllFiltered(startDate, endDate, userId);
     }
 
-    public List<Meal> getAll(){
-        return repository.getAll();
+    public List<Meal> getAll(Integer userId){
+        return repository.getAll(userId);
     }
 
     public void update(Meal meal, Integer userId) throws NotFoundException {

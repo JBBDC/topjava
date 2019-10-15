@@ -13,9 +13,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+
+import static org.springframework.util.StringUtils.isEmpty;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
@@ -79,15 +83,19 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
+
                 String[] filter = {request.getParameter("startDate"), request.getParameter("endDate"),
                         request.getParameter("startTime"), request.getParameter("endTime")};
 
-                if (request.getParameter("startDate") == null || request.getParameter("endDate") == null
-                        || request.getParameter("startTime") == null || request.getParameter("endTime") == null) {
-                    request.setAttribute("meals", controller.getAllFiltered("", "", "", ""));
+                if (isEmpty(filter[0]) && isEmpty(filter[1]) && isEmpty(filter[2]) && isEmpty(filter[3])) {
+                    request.setAttribute("meals", controller.getAll());
                 } else {
-                    request.setAttribute("filter", filter);
-                    request.setAttribute("meals", controller.getAllFiltered(filter[0],filter[1],filter[2],filter[3]));
+                    request.setAttribute("meals", controller.getAllFiltered(
+                            isEmpty(filter[0]) ? null : LocalDate.parse(filter[0]),
+                            isEmpty(filter[1]) ? null : LocalDate.parse(filter[1]),
+                            isEmpty(filter[2]) ? null : LocalTime.parse(filter[2]),
+                            isEmpty(filter[3]) ? null : LocalTime.parse(filter[3])
+                    ));
                 }
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;

@@ -28,18 +28,18 @@ public class MealRestController {
 
     public List<MealTo> getAll() {
         log.info("getAll");
-        return MealsUtil.getTos(service.getAll(), DEFAULT_CALORIES_PER_DAY);
+        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), DEFAULT_CALORIES_PER_DAY);
     }
 
-    public List<MealTo> getAllFiltered(String startDate, String endDate, String startTime, String endTime) {
+    public List<MealTo> getAllFiltered(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         log.info("getAllFiltered");
         return new ArrayList<>(MealsUtil.getFilteredTos(
-                service.getAll(startDate.isEmpty() ? LocalDate.MIN : LocalDate.parse(startDate),
-                        endDate.isEmpty() ? LocalDate.MAX : LocalDate.parse(endDate),
+                service.getAllFiltered(startDate == null ? LocalDate.MIN : startDate,
+                        endDate == null ? LocalDate.MAX : endDate,
                         SecurityUtil.authUserId()),
                 DEFAULT_CALORIES_PER_DAY,
-                startTime.isEmpty() ? LocalTime.MIN : LocalTime.parse(startTime),
-                endTime.isEmpty() ? LocalTime.MAX : LocalTime.parse(endTime)
+                startTime == null ? LocalTime.MIN : startTime,
+                endTime == null ? LocalTime.MAX : endTime
         ));
     }
 

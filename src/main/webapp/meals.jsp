@@ -32,10 +32,10 @@
         </tr>
         <form method="get" action="meals">
             <tr>
-                <td><input type="date" name="startDate" value="${filter[0]}"></td>
-                <td><input type="date" name="endDate" value="${filter[1]}"></td>
-                <td><input type="time" name="startTime" value="${filter[2]}"></td>
-                <td><input type="time" name="endTime" value="${filter[3]}"></td>
+                <td><input type="date" name="startDate" value="${param.get("startDate")}"></td>
+                <td><input type="date" name="endDate" value="${param.get("endDate")}"></td>
+                <td><input type="time" name="startTime" value="${param.get("startTime")}"></td>
+                <td><input type="time" name="endTime" value="${param.get("endTime")}"></td>
             </tr>
             <tr>
                 <td>
