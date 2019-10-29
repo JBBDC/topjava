@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static ru.javawebinar.topjava.util.DateTimeUtil.SQL_DATE_MAX;
+import static ru.javawebinar.topjava.util.DateTimeUtil.SQL_DATE_MIN;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -32,8 +34,8 @@ public class MealService {
 
     public List<Meal> getBetweenDates(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
         return repository.getBetween(
-                DateTimeUtil.createDateTime(startDate, LocalDate.now().minusYears(1000), LocalTime.MIN),
-                DateTimeUtil.createDateTime(endDate, LocalDate.now().plusYears(1000), LocalTime.MAX),
+                DateTimeUtil.createDateTime(startDate, SQL_DATE_MIN, LocalTime.MIN),
+                DateTimeUtil.createDateTime(endDate, SQL_DATE_MAX, LocalTime.MAX),
                 userId);
     }
 

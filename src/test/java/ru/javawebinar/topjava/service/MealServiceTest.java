@@ -48,15 +48,16 @@ public class MealServiceTest {
     public final Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            log.info(description.getMethodName() + " finished, time taken " + nanos);
-            testTimings.add(description.getMethodName() + " - " +
+            log.info(description.getMethodName() + " finished, time taken " +
+                    TimeUnit.MILLISECONDS.convert(nanos, TimeUnit.NANOSECONDS) + " ms");
+            testTimings.add("\n" +description.getMethodName() + " - " +
                     TimeUnit.MILLISECONDS.convert(nanos, TimeUnit.NANOSECONDS) + " ms");
         }
     };
 
     @AfterClass
     public static void printTestTimings() {
-            testTimings.forEach(log::info);
+        log.info(String.join("",testTimings));
     }
 
 
@@ -116,6 +117,12 @@ public class MealServiceTest {
     public void updateNotFound() throws Exception {
         exception.expect(NotFoundException.class);
         service.update(MEAL1, ADMIN_ID);
+    }
+
+    @Test
+    public void updateNotExisted() throws Exception {
+        exception.expect(NotFoundException.class);
+        service.update(NOT_EXISTING_ADMIN_MEAL, ADMIN_ID);
     }
 
     @Test

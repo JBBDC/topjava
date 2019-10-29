@@ -3,13 +3,14 @@ package ru.javawebinar.topjava.util;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtil {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+    public static final LocalDate SQL_DATE_MAX = LocalDate.of(9999, Month.DECEMBER,31);
+    public static final LocalDate SQL_DATE_MIN = LocalDate.of(1000, Month.JANUARY,1);
 
     private DateTimeUtil() {
     }

@@ -24,6 +24,7 @@ public class MealTestData {
     public static final Meal MEAL6 = new Meal(MEAL1_ID + 5, of(2015, Month.MAY, 31, 20, 0), "Ужин", 510, USER);
     public static final Meal ADMIN_MEAL1 = new Meal(ADMIN_MEAL_ID, of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510, ADMIN);
     public static final Meal ADMIN_MEAL2 = new Meal(ADMIN_MEAL_ID + 1, of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500, ADMIN);
+    public static final Meal NOT_EXISTING_ADMIN_MEAL = new Meal(ADMIN_MEAL_ID + 2, of(2015, Month.FEBRUARY, 1, 22, 0), "Псевдоужин", 10, ADMIN);
 
     public static final List<Meal> MEALS = Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
 
