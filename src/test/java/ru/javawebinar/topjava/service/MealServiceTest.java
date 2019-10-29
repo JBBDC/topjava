@@ -48,16 +48,16 @@ public class MealServiceTest {
     public final Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            log.info(description.getMethodName() + " finished, time taken " +
-                    TimeUnit.MILLISECONDS.convert(nanos, TimeUnit.NANOSECONDS) + " ms");
-            testTimings.add("\n" +description.getMethodName() + " - " +
-                    TimeUnit.MILLISECONDS.convert(nanos, TimeUnit.NANOSECONDS) + " ms");
+            log.info("{} finished, time taken {} ms", description.getMethodName(),
+                    TimeUnit.MILLISECONDS.convert(nanos, TimeUnit.NANOSECONDS));
+            testTimings.add("\n" + String.format("%-30s %-2s ms", description.getMethodName(),
+                    TimeUnit.MILLISECONDS.convert(nanos, TimeUnit.NANOSECONDS)));
         }
     };
 
     @AfterClass
     public static void printTestTimings() {
-        log.info(String.join("",testTimings));
+        log.info(String.join("", testTimings));
     }
 
 
