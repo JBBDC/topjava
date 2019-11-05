@@ -33,7 +33,7 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return crudRepository.delete(id,userId) != 0;
+        return crudRepository.delete(id, userId) != 0;
     }
 
     @Override
@@ -50,6 +50,11 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getBetweenInclusive(LocalDate startDate, LocalDate endDate, int userId) {
-        return crudRepository.getBetweenInclusive(getStartInclusive(startDate),getEndExclusive(endDate),userId);
+        return crudRepository.getBetweenInclusive(getStartInclusive(startDate), getEndExclusive(endDate), userId);
+    }
+
+    @Override
+    public Meal getWithUser(int id, int userId) {
+        return crudRepository.getWithUser(id, userId);
     }
 }
