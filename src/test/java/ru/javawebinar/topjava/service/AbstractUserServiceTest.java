@@ -66,6 +66,12 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         assertMatch(user, USER);
     }
 
+    @Test
+    public void getWith2Roles() throws Exception {
+        User user = service.get(ADMIN_ID);
+        assertMatch(user, ADMIN);
+    }
+
     @Test(expected = NotFoundException.class)
     public void getNotFound() throws Exception {
         service.get(1);
@@ -82,6 +88,20 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         User updated = getUpdated();
         service.update(updated);
         assertMatch(service.get(USER_ID), updated);
+    }
+
+    @Test
+    public void updateAddRole() throws Exception {
+        User updated = getRoleAdded();
+        service.update(updated);
+        assertMatch(service.get(USER_ID), updated);
+    }
+
+    @Test
+    public void updateDeleteRole() throws Exception {
+        User updated = getRoleRemoved();
+        service.update(updated);
+        assertMatch(service.get(ADMIN_ID), updated);
     }
 
     @Test
