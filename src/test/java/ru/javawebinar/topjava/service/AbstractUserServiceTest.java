@@ -84,6 +84,12 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    public void getByEmailWith2Roles() throws Exception {
+        User user = service.getByEmail("admin@gmail.com");
+        assertMatch(user, ADMIN);
+    }
+
+    @Test
     public void update() throws Exception {
         User updated = getUpdated();
         service.update(updated);

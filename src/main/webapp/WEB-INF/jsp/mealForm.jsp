@@ -5,18 +5,22 @@
 
 <html>
 <head>
+    <base href="${pageContext.request.contextPath}/"/>
     <jsp:include page="fragments/headTag.jsp"/>
     <title><spring:message code="meal.title"/></title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+    <link rel="stylesheet" href="resources/css/style.css">
 </head>
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
-    <h3><a href="${pageContext.request.contextPath}"><spring:message code="app.home"/></a></h3>
+    <h3><a href=""><spring:message code="app.home"/></a></h3>
     <hr>
-    <h2><spring:message code="meal.edit"/></h2>
+    <h2>
+        <c:set var="create"><spring:message code="meal.add"/></c:set>
+        <c:set var="update"><spring:message code="meal.edit"/></c:set>
+        ${requestScope.action.equals('create') ? create : update}</h2>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
-    <form method="post" action="${pageContext.request.contextPath}/meals/mealForm">
+    <form method="post" action="meals/mealForm">
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
             <dt><spring:message code="common.date"/></dt>
