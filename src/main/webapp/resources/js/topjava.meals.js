@@ -1,4 +1,27 @@
 $(function () {
+    function getFiltered() {
+        let startDate = document.getElementById("startDate").value;
+        let startTime = document.getElementById("startTime").value;
+        let endDate = document.getElementById("endDate").value;
+        let endTime = document.getElementById("endTime").value;
+        $.ajax({
+            url: "ajax/meals/filter",
+            method: "GET",
+            data: {
+                startDate:startDate,
+                startTime:startTime,
+                endDate:endDate,
+                endTime:endTime
+            },
+            dataType:"json"
+        }).done(function(data) {
+            context.datatableApi.clear().rows.add(data).draw();
+            successNoty("Filtered")
+        });
+    }
+    $("#filter-meals-button").click(getFiltered);
+    $("#reset-meals-button").click(updateTable);
+
     $("#startDate ").datetimepicker({timepicker:false,
         format:'d.m.Y'});
     $("#endDate").datetimepicker({timepicker:false,
@@ -8,9 +31,7 @@ $(function () {
     $("#endTime").datetimepicker({datepicker:false,
         format:'H:i'});
     $("#dateTime").datetimepicker({format:'Y-m-d H:i'});
-});
 
-$(function () {
     makeEditable({
             ajaxUrl: "ajax/meals/",
             datatableApi: $("#datatable").DataTable({
@@ -45,4 +66,5 @@ $(function () {
         }
     );
 });
+
 

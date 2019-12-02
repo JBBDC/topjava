@@ -40,11 +40,11 @@
                 </form>
             </div>
             <div class="card-footer text-right">
-                <button class="btn btn-danger" onclick="resetFilter()">
+                <button class="btn btn-danger" id="reset-meals-button">
                     <span class="fa fa-remove"></span>
                     <spring:message code="common.cancel"/>
                 </button>
-                <button class="btn btn-primary" onclick="Filter()">
+                <button class="btn btn-primary" id="filter-meals-button">
                     <span class="fa fa-calculator"></span>
                     <spring:message code="meal.filter"/>
                 </button>
