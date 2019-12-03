@@ -1,4 +1,15 @@
 $(function () {
+    let isFiltered = false;
+
+    updateTable = function () {
+        if(isFiltered) {
+            getFiltered();
+        } else {
+            $.get(context.ajaxUrl, function (data) {
+                context.datatableApi.clear().rows.add(data).draw();
+            });
+        }
+    }
     function getFiltered() {
         let startDate = document.getElementById("startDate").value;
         let startTime = document.getElementById("startTime").value;
@@ -16,14 +27,20 @@ $(function () {
             dataType: "json"
         }).done(function (data) {
             context.datatableApi.clear().rows.add(data).draw();
-            successNoty("Filtered")
+            if(!isFiltered){
+                successNoty("Filtered");
+            }
         });
     }
 
-    $("#filter-meals-button").click(getFiltered);
+    $("#filter-meals-button").click( function () {
+        getFiltered();
+        isFiltered = true;
+    });
 
     $("#reset-meals-button").click(function () {
         document.getElementById("filter").reset();
+        isFiltered = false;
         updateTable();
     });
 
@@ -72,7 +89,7 @@ $(function () {
                 "order": [
                     [
                         0,
-                        "asc"
+                        "desc"
                     ]
                 ]
             })

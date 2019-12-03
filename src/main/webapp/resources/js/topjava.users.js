@@ -38,24 +38,22 @@ $(function () {
             })
         }
     );
+    $('.checkbox').change(function () {
+        let id = $(this).closest('tr').prop('id');
+        setEnable(this.checked, id);
+    });
 });
 
-function enable(id) {
+function setEnable(isEnabled, id) {
     $.ajax({
-        url: context.ajaxUrl + "enable/" + id,
-        method: "PUT"
+        url: context.ajaxUrl + "enable",
+        method: "POST",
+        data: {
+            isEnabled: isEnabled,
+            id: id
+        },
     }).done(function () {
-        updateTable();
-        successNoty("Enabled");
-    });
-}
-
-function disable(id) {
-    $.ajax({
-        url: context.ajaxUrl + "disable/" + id,
-        method: "PUT"
-    }).done(function () {
-        updateTable();
-        successNoty("Disabled");
+        successNoty(isEnabled ? "Enabled" : "Disabled");
+        $("#"+id).attr("data-enabled", isEnabled);
     });
 }

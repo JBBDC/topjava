@@ -26,17 +26,10 @@ public class AdminUIController extends AbstractUserController {
     }
 
     @Override
-    @PutMapping("/enable/{id}")
+    @PostMapping(value = "/enable")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void enable(@PathVariable int id) {
-        super.enable(id);
-    }
-
-    @Override
-    @PutMapping("/disable/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void disable(@PathVariable int id) {
-        super.disable(id);
+    public void setEnabled(@RequestParam boolean isEnabled, @RequestParam int id) {
+        super.setEnabled(isEnabled, id);
     }
 
     @PostMapping

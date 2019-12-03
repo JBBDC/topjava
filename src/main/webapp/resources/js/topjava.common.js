@@ -10,15 +10,6 @@ function makeEditable(ctx) {
         }
     });
 
-    $('.checkbox').change(function () {
-        let id = $(this).closest('tr').prop('id');
-        if (this.checked) {
-            enable(id);
-        } else {
-            disable(id)
-        }
-    });
-
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
     });
