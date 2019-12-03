@@ -8,29 +8,42 @@ $(function () {
             url: "ajax/meals/filter",
             method: "GET",
             data: {
-                startDate:startDate,
-                startTime:startTime,
-                endDate:endDate,
-                endTime:endTime
+                startDate: startDate,
+                startTime: startTime,
+                endDate: endDate,
+                endTime: endTime
             },
-            dataType:"json"
-        }).done(function(data) {
+            dataType: "json"
+        }).done(function (data) {
             context.datatableApi.clear().rows.add(data).draw();
             successNoty("Filtered")
         });
     }
-    $("#filter-meals-button").click(getFiltered);
-    $("#reset-meals-button").click(updateTable);
 
-    $("#startDate ").datetimepicker({timepicker:false,
-        format:'d.m.Y'});
-    $("#endDate").datetimepicker({timepicker:false,
-        format:'d.m.Y'});
-    $("#startTime ").datetimepicker({datepicker:false,
-        format:'H:i'});
-    $("#endTime").datetimepicker({datepicker:false,
-        format:'H:i'});
-    $("#dateTime").datetimepicker({format:'Y-m-d H:i'});
+    $("#filter-meals-button").click(getFiltered);
+
+    $("#reset-meals-button").click(function () {
+        document.getElementById("filter").reset();
+        updateTable();
+    });
+
+    $("#startDate").datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d',
+    })
+    $("#endDate").datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+    $("#startTime ").datetimepicker({
+        datepicker: false,
+        format: 'H:i'
+    });
+    $("#endTime").datetimepicker({
+        datepicker: false,
+        format: 'H:i'
+    });
+    $("#dateTime").datetimepicker({format: 'Y-m-d H:i'});
 
     makeEditable({
             ajaxUrl: "ajax/meals/",

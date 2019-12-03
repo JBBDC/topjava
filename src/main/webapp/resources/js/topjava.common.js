@@ -3,9 +3,19 @@ var context, form;
 function makeEditable(ctx) {
     context = ctx;
     form = $('#detailsForm');
+
     $(".delete").click(function () {
         if (confirm('Are you sure?')) {
-            deleteRow($(this).attr("id"));
+            deleteRow($(this).closest('tr').prop('id'));
+        }
+    });
+
+    $('.checkbox').change(function () {
+        let id = $(this).closest('tr').prop('id');
+        if (this.checked) {
+            enable(id);
+        } else {
+            disable(id)
         }
     });
 

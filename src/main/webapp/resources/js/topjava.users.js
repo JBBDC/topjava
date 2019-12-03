@@ -1,4 +1,3 @@
-// $(document).ready(function () {
 $(function () {
     makeEditable({
             ajaxUrl: "ajax/admin/users/",
@@ -40,3 +39,23 @@ $(function () {
         }
     );
 });
+
+function enable(id) {
+    $.ajax({
+        url: context.ajaxUrl + "enable/" + id,
+        method: "PUT"
+    }).done(function () {
+        updateTable();
+        successNoty("Enabled");
+    });
+}
+
+function disable(id) {
+    $.ajax({
+        url: context.ajaxUrl + "disable/" + id,
+        method: "PUT"
+    }).done(function () {
+        updateTable();
+        successNoty("Disabled");
+    });
+}
