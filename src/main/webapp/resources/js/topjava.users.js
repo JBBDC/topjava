@@ -54,6 +54,8 @@ function setEnable(isEnabled, id) {
         },
     }).done(function () {
         successNoty(isEnabled ? "Enabled" : "Disabled");
-        $("#"+id).attr("data-enabled", isEnabled);
+        $("#" + id).attr("data-enabled", isEnabled);
+    }).fail(function () {
+        $("#" + id).find('.checkbox').prop("checked", !isEnabled);
     });
 }
