@@ -1,3 +1,5 @@
+var userAjaxUrl = "ajax/profile/meals/";
+
 function updateFilteredTable() {
     $.ajax({
         type: "GET",
@@ -13,27 +15,45 @@ function clearFilter() {
 
 $(function () {
     makeEditable({
-        ajaxUrl: "ajax/profile/meals/",
+        ajaxUrl: userAjaxUrl,
         datatableApi: $("#datatable").DataTable({
+            "ajax": {
+                "url": userAjaxUrl,
+                "dataSrc": ""
+            },
             "paging": false,
             "info": true,
             "columns": [
                 {
-                    "data": "dateTime"
+                    "data": "dateTime",
+                    "render": function (data, type, row) {
+                        if (type === "display") {
+                            return data.replace(/T/g," ");
+                        }
+                        return data;
+                    }
                 },
                 {
-                    "data": "description"
+                    "data": "description",
+                    "render": function (data, type, row) {
+                        return data;
+                    }
                 },
                 {
-                    "data": "calories"
+                    "data": "calories",
+                    "render": function (data, type, row) {
+                        return data;
+                    }
                 },
                 {
-                    "defaultContent": "Edit",
-                    "orderable": false
+                    "defaultContent": "",
+                    "orderable": false,
+                    "render": renderEditBtn
                 },
                 {
-                    "defaultContent": "Delete",
-                    "orderable": false
+                    "defaultContent": "",
+                    "orderable": false,
+                    "render": renderDeleteBtn
                 }
             ],
             "order": [
@@ -41,7 +61,10 @@ $(function () {
                     0,
                     "desc"
                 ]
-            ]
+            ],
+            "rowCallback": function( row, data, index ) {
+                    $(row).attr('data-mealExcess', data.excess);
+            }
         }),
         updateTable: updateFilteredTable
     });
