@@ -21,6 +21,9 @@ function updateRow(id) {
     $("#modalTitle").html(i18n["editTitle"]);
     $.get(context.ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
+            if (key === 'dateTime') {
+                value = value.replace(/T/g, " ");
+            }
             form.find("input[name='" + key + "']").val(value);
         });
         $('#editRow').modal();
@@ -43,11 +46,21 @@ function updateTableByData(data) {
     context.datatableApi.clear().rows.add(data).draw();
 }
 
+function serialize(form) {
+    let data = $(form).serializeArray();
+    $.each( data, function( i, field ) {
+       if(field.name === 'dateTime'){
+           field.value = field.value.replace(/ /g, "T");
+       }
+    });
+    return $.param(data);
+}
+
 function save() {
     $.ajax({
         type: "POST",
         url: context.ajaxUrl,
-        data: form.serialize()
+        data: serialize(form)
     }).done(function () {
         $("#editRow").modal("hide");
         context.updateTable();

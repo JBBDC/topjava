@@ -9,8 +9,9 @@
 </footer>
 <script type="text/javascript">
     const i18n = [];
-
-    <c:forEach var="key" items='<%=new String[]{"common.deleted","common.saved","common.enabled","common.disabled","common.errorStatus","common.confirm"}%>'>
+    <c:forEach var="key" items='<%=new String[]{"common.deleted","common.saved","common.enabled","common.disabled","common.errorStatus",
+    "common.confirm","meal.title","meal.edit","meal.add","meal.filter","meal.startDate","meal.endDate","meal.dateTime","meal.calories",
+    "meal.description","user.title","user.edit","user.add","user.name","user.email","user.roles","user.active","user.registered","user.password"}%>'>
     i18n["${key}"] = "<spring:message code="${key}"/>";
     </c:forEach>
 </script>
