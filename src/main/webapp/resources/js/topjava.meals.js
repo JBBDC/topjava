@@ -28,22 +28,16 @@ $(function () {
                     "data": "dateTime",
                     "render": function (data, type, row) {
                         if (type === "display") {
-                            return data.replace(/T/g, " ");
+                            return convertDateTime(data);
                         }
                         return data;
                     }
                 },
                 {
                     "data": "description",
-                    "render": function (data, type, row) {
-                        return data;
-                    }
                 },
                 {
-                    "data": "calories",
-                    "render": function (data, type, row) {
-                        return data;
-                    }
+                    "data": "calories"
                 },
                 {
                     "defaultContent": "",
@@ -74,7 +68,7 @@ $(function () {
         format: 'Y-m-d',
         onShow: function (ct) {
             this.setOptions({
-                maxDate: jQuery('#endDate').val() ? jQuery('#endDate').val() : false
+                maxDate: $('#endDate').val() ? $('#endDate').val() : false
             })
         }
     });
@@ -83,7 +77,7 @@ $(function () {
         format: 'Y-m-d',
         onShow: function (ct) {
             this.setOptions({
-                minDate: jQuery('#startDate').val() ? jQuery('#startDate').val() : false
+                minDate: $('#startDate').val() ? $('#startDate').val() : false
             })
         }
     });
@@ -92,7 +86,7 @@ $(function () {
         format: 'H:i',
         onShow: function (ct) {
             this.setOptions({
-                maxTime: jQuery('#endTime').val() ? jQuery('#endTime').val() : false
+                maxTime: $('#endTime').val() ? $('#endTime').val() : false
             })
         }
     });
@@ -101,7 +95,7 @@ $(function () {
         format: 'H:i',
         onShow: function (ct) {
             this.setOptions({
-                minTime: jQuery('#startTime').val() ? jQuery('#startTime').val() : false
+                minTime: $('#startTime').val() ? $('#startTime').val() : false
             })
         }
     });

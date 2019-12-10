@@ -22,7 +22,7 @@ function updateRow(id) {
     $.get(context.ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
             if (key === 'dateTime') {
-                value = value.replace(/T/g, " ");
+                value = convertDateTime(value);
             }
             form.find("input[name='" + key + "']").val(value);
         });
@@ -50,10 +50,18 @@ function serialize(form) {
     let data = $(form).serializeArray();
     $.each( data, function( i, field ) {
        if(field.name === 'dateTime'){
-           field.value = field.value.replace(/ /g, "T");
+           field.value = convertDateTime(field.value);
        }
     });
     return $.param(data);
+}
+
+function convertDateTime(value) {
+        if(value.includes('T')) {
+            return value.replace(/T/g, " ");
+        } else {
+            return value.replace(/ /g, "T");
+        }
 }
 
 function save() {
