@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.GroupSequence;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -22,28 +23,30 @@ import java.time.LocalTime;
 })
 @Entity
 @Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "meals_unique_user_datetime_idx")})
+@GroupSequence({Meal.ValidateWithoutUser.class, Meal.class})
 public class Meal extends AbstractBaseEntity {
     public static final String ALL_SORTED = "Meal.getAll";
     public static final String DELETE = "Meal.delete";
     public static final String GET_BETWEEN = "Meal.getBetween";
 
     @Column(name = "date_time", nullable = false)
-    @NotNull
+    @NotNull(groups = {ValidateWithoutUser.class})
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
-    @NotBlank
-    @Size(min = 2, max = 120)
+    @NotBlank(groups = {ValidateWithoutUser.class, })
+    @Size(min = 2, max = 120, groups = {ValidateWithoutUser.class})
     private String description;
 
     @Column(name = "calories", nullable = false)
-    @NotNull
-    @Range(min = 10, max = 5000)
+    @NotNull(groups = ValidateWithoutUser.class)
+    @Range(min = 10, max = 5000, groups = {ValidateWithoutUser.class})
     private Integer calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
     private User user;
 
     public Meal() {
@@ -109,4 +112,5 @@ public class Meal extends AbstractBaseEntity {
                 ", calories=" + calories +
                 '}';
     }
+    public interface ValidateWithoutUser{}
 }

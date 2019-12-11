@@ -4,15 +4,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static ru.javawebinar.topjava.model.Meal.*;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkValidationResult;
 
 @RestController
@@ -40,7 +41,8 @@ public class MealUIController extends AbstractMealController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public ResponseEntity<String> createOrUpdate(@Valid Meal meal, BindingResult result) {
+    public ResponseEntity<String> createOrUpdate(
+            @Validated({ValidateWithoutUser.class}) Meal meal, BindingResult result) {
         String errors = checkValidationResult(result);
         if(errors != null){
             return ResponseEntity.unprocessableEntity().body(errors);
