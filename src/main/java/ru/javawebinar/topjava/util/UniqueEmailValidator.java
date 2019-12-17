@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.topjava.annotations.UniqueEmail;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
@@ -11,10 +10,10 @@ import javax.validation.ConstraintValidatorContext;
 
 public class UniqueEmailValidator extends Validator implements ConstraintValidator<UniqueEmail, String> {
 
-    @Autowired
     UserService service;
 
-    public UniqueEmailValidator() {
+    public UniqueEmailValidator(UserService service) {
+        this.service = service;
     }
 
     @Override

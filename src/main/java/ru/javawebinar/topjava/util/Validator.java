@@ -7,6 +7,9 @@ import javax.validation.ConstraintValidatorContext;
 
 public abstract class Validator {
 
+    public Validator() {
+    }
+
     final Logger log = LoggerFactory.getLogger(UniqueEmailValidator.class);
 
     public void logException(Throwable e){
