@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.topjava.HasId;
 import ru.javawebinar.topjava.annotations.UniqueUserEmail;
 import ru.javawebinar.topjava.model.User;
@@ -9,10 +10,14 @@ import ru.javawebinar.topjava.to.UserTo;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class UserUniqueEmailValidator extends EmailValidator implements ConstraintValidator<UniqueUserEmail,  HasId> {
+import static ru.javawebinar.topjava.annotations.UniqueEmail.USER_WITH_THIS_EMAIL_ALREADY_EXISTS;
 
-    public UserUniqueEmailValidator(UserService userRepository) {
-        super(userRepository);
+public class UserUniqueEmailValidator extends Validator implements ConstraintValidator<UniqueUserEmail,  HasId> {
+
+    @Autowired
+    UserService service;
+
+    public UserUniqueEmailValidator() {
     }
 
     @Override
@@ -20,10 +25,7 @@ public class UserUniqueEmailValidator extends EmailValidator implements Constrai
     }
     @Override
     public boolean isValid(HasId user, ConstraintValidatorContext context) {
-        context.disableDefaultConstraintViolation();
-        context.buildConstraintViolationWithTemplate("User with this email already exists")
-                .addPropertyNode("email")
-                .addConstraintViolation();
+        setCustomConstraintViolation(context,USER_WITH_THIS_EMAIL_ALREADY_EXISTS,"email");
         return user != null && !isExistAlready(user);
     }
 
@@ -44,7 +46,7 @@ public class UserUniqueEmailValidator extends EmailValidator implements Constrai
                 return true;
             }
         } catch (Exception e) {
-            log.info("{} was thrown in isExistAlready method", e.getMessage());
+            logException(e);
         }
         return false;
     }

@@ -9,11 +9,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static ru.javawebinar.topjava.annotations.UniqueEmail.USER_WITH_THIS_EMAIL_ALREADY_EXISTS;
+
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = UserUniqueEmailValidator.class)
 public @interface UniqueUserEmail {
-        String message() default "User with this email already exists";
+        String message() default USER_WITH_THIS_EMAIL_ALREADY_EXISTS;
         Class<?>[] groups() default {};
         Class<? extends Payload>[] payload() default {};
 

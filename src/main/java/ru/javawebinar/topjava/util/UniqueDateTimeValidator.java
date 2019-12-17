@@ -11,7 +11,9 @@ import ru.javawebinar.topjava.web.SecurityUtil;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class UniqueDateTimeValidator implements ConstraintValidator<UniqueDateTime, Meal> {
+import static ru.javawebinar.topjava.annotations.UniqueDateTime.MEAL_WITH_THIS_DATETIME_ALREADY_EXISTS;
+
+public class UniqueDateTimeValidator extends Validator implements ConstraintValidator<UniqueDateTime, Meal> {
 
     final Logger log = LoggerFactory.getLogger(UniqueDateTimeValidator.class);
 
@@ -26,6 +28,7 @@ public class UniqueDateTimeValidator implements ConstraintValidator<UniqueDateTi
 
     @Override
     public boolean isValid(Meal meal, ConstraintValidatorContext context) {
+        setCustomConstraintViolation(context,MEAL_WITH_THIS_DATETIME_ALREADY_EXISTS,"dateTime");
         return meal != null && !isExistAlready(meal);
     }
 
@@ -38,7 +41,7 @@ public class UniqueDateTimeValidator implements ConstraintValidator<UniqueDateTi
             }
             return isDateExist;
         } catch (Exception e) {
-            log.info("{} was thrown in isExistAlready method", e.getMessage());
+            logException(e);
         }
         return false;
     }

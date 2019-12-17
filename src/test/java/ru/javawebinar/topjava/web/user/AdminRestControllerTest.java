@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.annotations.UniqueEmail.USER_WITH_THIS_EMAIL_ALREADY_EXISTS;
 
 class AdminRestControllerTest extends AbstractControllerTest {
 
@@ -102,7 +103,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         updated.setEmail("admin@gmail.com");
         perform(doPut(USER_ID).jsonUserWithPassword(updated).basicAuth(ADMIN))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string(containsString("User with this email already exists")));
+                .andExpect(content().string(containsString(USER_WITH_THIS_EMAIL_ALREADY_EXISTS)));
     }
 
     @Test
@@ -139,7 +140,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         newUser.setEmail("user@yandex.ru");
         perform(doPost().jsonUserWithPassword(newUser).basicAuth(ADMIN))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string(containsString("User with this email already exists")));
+                .andExpect(content().string(containsString(USER_WITH_THIS_EMAIL_ALREADY_EXISTS)));
     }
 
     @Test

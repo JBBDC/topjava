@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import ru.javawebinar.topjava.util.ValidationUtil;
 import ru.javawebinar.topjava.util.exception.ErrorInfo;
 import ru.javawebinar.topjava.util.exception.ErrorType;
 import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
@@ -23,6 +22,8 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.getRootCause;
+import static ru.javawebinar.topjava.util.ValidationUtil.parseErrors;
 import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 
 @RestControllerAdvice
@@ -69,12 +70,19 @@ public class ExceptionInfoHandler {
 
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
     private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
-        Throwable rootCause = ValidationUtil.getRootCause(e);
+        Throwable rootCause = getRootCause(e);
         if (logException) {
             log.error(errorType + " at request " + req.getRequestURL(), rootCause);
         } else {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
-        return new ErrorInfo(req.getRequestURL(), errorType, rootCause.toString());
+        String cause = rootCause.toString();
+        if(rootCause instanceof BindException){
+            cause = parseErrors(((BindException) rootCause).getBindingResult());
+        }
+        if(rootCause instanceof MethodArgumentNotValidException){
+            cause = parseErrors(((MethodArgumentNotValidException) rootCause).getBindingResult());
+        }
+        return new ErrorInfo(req.getRequestURL(), errorType, cause);
     }
 }

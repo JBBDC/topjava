@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.annotations.UniqueEmail.USER_WITH_THIS_EMAIL_ALREADY_EXISTS;
 
 class ProfileRestControllerTest extends AbstractControllerTest {
 
@@ -76,7 +77,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         perform(doPost("/register").jsonBody(newTo))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string(containsString("User with this email already exists")));
+                .andExpect(content().string(containsString(USER_WITH_THIS_EMAIL_ALREADY_EXISTS)));
     }
 
     @Test
@@ -103,7 +104,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         perform(doPut().jsonBody(updatedTo).basicAuth(USER))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string(containsString("User with this email already exists")));
+                .andExpect(content().string(containsString(USER_WITH_THIS_EMAIL_ALREADY_EXISTS)));
     }
 
     @Test

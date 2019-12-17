@@ -13,7 +13,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = UniqueDateTimeValidator.class)
 public @interface UniqueDateTime {
-    String message() default "Meal with this DateTime already exists";
+
+    String MEAL_WITH_THIS_DATETIME_ALREADY_EXISTS = "Meal with this DateTime already exists";
+
+    String message() default MEAL_WITH_THIS_DATETIME_ALREADY_EXISTS;
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

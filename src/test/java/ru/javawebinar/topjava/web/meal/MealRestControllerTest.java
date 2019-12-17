@@ -20,6 +20,7 @@ import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.TestUtil.readFromJsonMvcResult;
 import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.annotations.UniqueDateTime.MEAL_WITH_THIS_DATETIME_ALREADY_EXISTS;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 import static ru.javawebinar.topjava.util.MealsUtil.createTo;
 import static ru.javawebinar.topjava.util.MealsUtil.getTos;
@@ -90,7 +91,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         Meal newMeal = MealTestData.getNewWithExistingDate();
         perform(doPost().jsonBody(newMeal).basicAuth(USER))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string(containsString("Meal with this DateTime already exists")));
+                .andExpect(content().string(containsString(MEAL_WITH_THIS_DATETIME_ALREADY_EXISTS)));
     }
 
     @Test
