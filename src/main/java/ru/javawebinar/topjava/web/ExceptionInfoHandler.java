@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web;
 
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -45,6 +46,12 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
+        return logAndGetErrorInfo(req, e, true, DATA_ERROR);
+    }
+
+    @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
+    @ExceptionHandler(PSQLException.class)
+    public ErrorInfo conflict(HttpServletRequest req, PSQLException e) {
         return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 

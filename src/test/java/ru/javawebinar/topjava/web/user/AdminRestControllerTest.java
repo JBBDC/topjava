@@ -96,6 +96,22 @@ class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void updateWithExistingEmail() throws Exception {
+        User updated = new User(UserTestData.getUpdated());
+        updated.setEmail("admin@gmail.com");
+        perform(doPut(USER_ID).jsonUserWithPassword(updated).basicAuth(ADMIN))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void updateWithOwnEmail() throws Exception {
+        User updated = UserTestData.getUpdated();
+        perform(doPut(USER_ID).jsonUserWithPassword(updated).basicAuth(ADMIN))
+                .andExpect(status().isNoContent());
+        USER_MATCHERS.assertMatch(userService.get(USER_ID), updated);
+    }
+
+    @Test
     void createWithLocation() throws Exception {
         User newUser = UserTestData.getNew();
         ResultActions action = perform(doPost().jsonUserWithPassword(newUser).basicAuth(ADMIN))
@@ -111,6 +127,14 @@ class AdminRestControllerTest extends AbstractControllerTest {
     @Test
     void createNotValid() throws Exception {
         User newUser = UserTestData.getNewNotValid();
+        perform(doPost().jsonUserWithPassword(newUser).basicAuth(ADMIN))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void createWithExistingEmail() throws Exception {
+        User newUser = new User(UserTestData.getNew());
+        newUser.setEmail("user@yandex.ru");
         perform(doPost().jsonUserWithPassword(newUser).basicAuth(ADMIN))
                 .andExpect(status().isUnprocessableEntity());
     }

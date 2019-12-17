@@ -1,6 +1,9 @@
 package ru.javawebinar.topjava.to;
 
 import org.hibernate.validator.constraints.Range;
+import ru.javawebinar.topjava.View;
+import ru.javawebinar.topjava.annotations.UniqueEmail;
+import ru.javawebinar.topjava.annotations.UniqueUserEmail;
 import ru.javawebinar.topjava.util.UserUtil;
 
 import javax.validation.constraints.Email;
@@ -9,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+@UniqueUserEmail(groups = View.onCreate.class)
 public class UserTo extends BaseTo implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -19,6 +23,7 @@ public class UserTo extends BaseTo implements Serializable {
     @Email
     @NotBlank
     @Size(max = 100)
+    @UniqueEmail(groups = View.onProfileUpdate.class)
     private String email;
 
     @NotBlank

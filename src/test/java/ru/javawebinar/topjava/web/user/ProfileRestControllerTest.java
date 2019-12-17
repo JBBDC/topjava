@@ -70,6 +70,14 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void registerExistEmail() throws Exception {
+        UserTo newTo = new UserTo(null, "userWithExistingEmail", "user@yandex.ru", "newPassword", 1500);
+        perform(doPost("/register").jsonBody(newTo))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     void update() throws Exception {
         UserTo updatedTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword", 1500);
         perform(doPut().jsonBody(updatedTo).basicAuth(USER))
@@ -85,5 +93,22 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         perform(doPut().jsonBody(updatedTo).basicAuth(USER))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void updateExistEmail() throws Exception {
+        UserTo updatedTo = new UserTo(null, "newName", "admin@gmail.com", "newPassword", 1500);
+        perform(doPut().jsonBody(updatedTo).basicAuth(USER))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void updateWithOwnEmail() throws Exception {
+        UserTo updatedTo = new UserTo(null, "newName", "admin@gmail.com", "newPassword", 1500);
+        perform(doPut().jsonBody(updatedTo).basicAuth(ADMIN))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+        USER_MATCHERS.assertMatch(userService.get(ADMIN_ID), UserUtil.updateFromTo(new User(ADMIN), updatedTo));
     }
 }

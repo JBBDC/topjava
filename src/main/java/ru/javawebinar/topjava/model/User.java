@@ -6,6 +6,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.util.CollectionUtils;
+import ru.javawebinar.topjava.View;
+import ru.javawebinar.topjava.annotations.UniqueEmail;
+import ru.javawebinar.topjava.annotations.UniqueUserEmail;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -24,6 +27,7 @@ import static ru.javawebinar.topjava.util.UserUtil.DEFAULT_CALORIES_PER_DAY;
 })
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
+@UniqueUserEmail(groups = View.onCreate.class)
 public class User extends AbstractNamedEntity {
 
     public static final String DELETE = "User.delete";
@@ -34,6 +38,7 @@ public class User extends AbstractNamedEntity {
     @Email
     @NotBlank
     @Size(max = 100)
+    @UniqueEmail(groups = View.onProfileUpdate.class)
     private String email;
 
     @Column(name = "password", nullable = false)
