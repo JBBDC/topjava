@@ -28,6 +28,9 @@ public class MealTestData {
     public static Meal getNew() {
         return new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Созданный ужин", 300);
     }
+    public static Meal getNewWithExistingDate() {
+        return new Meal(null, MEAL1.getDateTime(), "Созданный ужин", 300);
+    }
 
     public static Meal getNotValidNew() {
         return new Meal(null, null, "Null date meal", 1000);

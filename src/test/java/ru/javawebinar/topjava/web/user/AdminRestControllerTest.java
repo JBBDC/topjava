@@ -11,6 +11,7 @@ import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -100,7 +101,8 @@ class AdminRestControllerTest extends AbstractControllerTest {
         User updated = new User(UserTestData.getUpdated());
         updated.setEmail("admin@gmail.com");
         perform(doPut(USER_ID).jsonUserWithPassword(updated).basicAuth(ADMIN))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string(containsString("User with this email already exists")));
     }
 
     @Test
@@ -136,7 +138,8 @@ class AdminRestControllerTest extends AbstractControllerTest {
         User newUser = new User(UserTestData.getNew());
         newUser.setEmail("user@yandex.ru");
         perform(doPost().jsonUserWithPassword(newUser).basicAuth(ADMIN))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string(containsString("User with this email already exists")));
     }
 
     @Test

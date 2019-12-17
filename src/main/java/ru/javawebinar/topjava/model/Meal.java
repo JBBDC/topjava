@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.javawebinar.topjava.View;
+import ru.javawebinar.topjava.annotations.UniqueDateTime;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ import java.time.LocalTime;
 })
 @Entity
 @Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "meals_unique_user_datetime_idx")})
+@UniqueDateTime
 public class Meal extends AbstractBaseEntity {
     public static final String ALL_SORTED = "Meal.getAll";
     public static final String DELETE = "Meal.delete";

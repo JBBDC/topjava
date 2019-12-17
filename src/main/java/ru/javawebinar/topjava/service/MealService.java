@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
@@ -30,6 +31,13 @@ public class MealService {
 
     public List<Meal> getBetweenDates(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
         return repository.getBetweenInclusive(startDate, endDate, userId);
+    }
+
+    public Meal getByDateTime(LocalDateTime date, int userId) {
+        return getBetweenDates(date.toLocalDate(), date.toLocalDate(), userId).stream()
+                .filter(meal -> meal.getDateTime().equals(date))
+                .findAny()
+                .orElse(null);
     }
 
     public List<Meal> getAll(int userId) {

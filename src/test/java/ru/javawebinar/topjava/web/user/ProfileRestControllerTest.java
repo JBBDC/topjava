@@ -10,6 +10,7 @@ import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,7 +75,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         UserTo newTo = new UserTo(null, "userWithExistingEmail", "user@yandex.ru", "newPassword", 1500);
         perform(doPost("/register").jsonBody(newTo))
                 .andDo(print())
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string(containsString("User with this email already exists")));
     }
 
     @Test
@@ -100,7 +102,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         UserTo updatedTo = new UserTo(null, "newName", "admin@gmail.com", "newPassword", 1500);
         perform(doPut().jsonBody(updatedTo).basicAuth(USER))
                 .andDo(print())
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string(containsString("User with this email already exists")));
     }
 
     @Test

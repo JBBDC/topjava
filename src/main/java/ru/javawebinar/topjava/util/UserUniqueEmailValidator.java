@@ -15,9 +15,10 @@ public class UserUniqueEmailValidator extends EmailValidator implements Constrai
         super(userRepository);
     }
 
+    @Override
     public void initialize(UniqueUserEmail constraint) {
     }
-
+    @Override
     public boolean isValid(HasId user, ConstraintValidatorContext context) {
         context.disableDefaultConstraintViolation();
         context.buildConstraintViolationWithTemplate("User with this email already exists")

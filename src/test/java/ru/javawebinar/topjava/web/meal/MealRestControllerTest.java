@@ -11,6 +11,7 @@ import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -82,6 +83,14 @@ class MealRestControllerTest extends AbstractControllerTest {
         Meal notValid = MealTestData.getUpdatedNotValid();
         perform(doPut(MEAL1_ID).jsonBody(notValid).basicAuth(USER))
                 .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void createWithExistingDate() throws Exception {
+        Meal newMeal = MealTestData.getNewWithExistingDate();
+        perform(doPost().jsonBody(newMeal).basicAuth(USER))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string(containsString("Meal with this DateTime already exists")));
     }
 
     @Test

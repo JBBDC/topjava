@@ -44,14 +44,14 @@ public class ExceptionInfoHandler {
     }
 
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
+    @ExceptionHandler(PSQLException.class)
+    public ErrorInfo conflict(HttpServletRequest req, PSQLException e) {
         return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
-    @ExceptionHandler(PSQLException.class)
-    public ErrorInfo conflict(HttpServletRequest req, PSQLException e) {
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 
